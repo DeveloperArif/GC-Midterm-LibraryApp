@@ -17,16 +17,16 @@ package library;
 	public class LibraryTextFile {
 		
 		// The path to the file to use
-		public static final String FILE_NAME = "book.txt";
+		public static final String FILE_NAME = "/Users/ARJ/eclipse-workspace/Midterm/src/book.txt";
 		
 		// Modify this method as necessary to convert a line of text from the file to a new item instance
 		private static Book convertLineToItem(String line) throws ParseException {
 			String[] parts = line.split(",");
 			Book book = new Book();
-			book.setBookAuthor(parts[0]);
-			book.setBookTitle(parts[1]);
+			book.setBookTitle(parts[0].trim());
+			book.setBookAuthor(parts[1].trim());
 			SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy");
-			date.parse(parts[2]);
+			date.parse(parts[2].trim());
 		//	book.setDueDate(date);
 			book.getBookAuthor();
 			book.getBookTitle();
@@ -35,13 +35,14 @@ package library;
 			return book;
 		}
 		
+
 		// Modify this method as necessary to convert an item instance to a line of text in the file
 		private static String convertItemToLine(Book book) {
 			return String.format("%s,%s,%s", book.getBookAuthor(), book.getBookTitle(), book.getDueDate());
 		}
 		
-		public static List<Book> readFile() throws ParseException {
-			List<Book> items = new ArrayList<>();
+		public static ArrayList<Book> readFile() throws ParseException {
+			ArrayList<Book> items = new ArrayList<>();
 			
 			try (
 				// Open/prepare the resources in the try resources block
