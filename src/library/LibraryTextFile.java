@@ -17,28 +17,28 @@ package library;
 	public class LibraryTextFile {
 		
 		// The path to the file to use
-		public static final String FILE_NAME = "/Users/ARJ/eclipse-workspace/Midterm/src/book.txt";
+		public static final String FILE_NAME = "book.txt";
 		
 		// Modify this method as necessary to convert a line of text from the file to a new item instance
 		private static Book convertLineToItem(String line) throws ParseException {
-			String[] parts = line.split(",");
+			String[] parts = line.split("\t");
+			//System.out.println(parts[0]+parts[1]+parts[2]+parts[3]);
+			SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 			Book book = new Book();
 			book.setBookTitle(parts[0].trim());
 			book.setBookAuthor(parts[1].trim());
-			SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy");
-			date.parse(parts[2].trim());
-		//	book.setDueDate(date);
-			book.getBookAuthor();
-			book.getBookTitle();
-			book.getDueDate();
-			
+			//book.setBookStatus(Enum.valueOf(Status.class, parts[2]));
+			book.setBookStatus(Status.valueOf(parts[2]));
+			if(parts[3].equals("")|| parts[3].equals("null")|| parts[3].isEmpty())
+				book.setDueDate(null);
+			else 
+				book.setDueDate(date.parse(parts[3].trim()));
 			return book;
 		}
 		
-
 		// Modify this method as necessary to convert an item instance to a line of text in the file
 		private static String convertItemToLine(Book book) {
-			return String.format("%s,%s,%s", book.getBookAuthor(), book.getBookTitle(), book.getDueDate());
+			return String.format("%s\t%s\t%s\t%s", book.getBookTitle(),book.getBookAuthor(), book.getBookStatus(),book.getDueDate());
 		}
 		
 		public static ArrayList<Book> readFile() throws ParseException {
@@ -134,7 +134,7 @@ package library;
 			}
 		}
 		
-		public static List<Book> readFile_theOldPainfulWay() throws ParseException {
+/*		public static List<Book> readFile_theOldPainfulWay() throws ParseException {
 			List<Book> items = new ArrayList<>();
 			
 			FileInputStream fileInputStream = null;
@@ -167,7 +167,7 @@ package library;
 					}
 				}
 			}
-		}
+		}*/
 
 	}
 	
