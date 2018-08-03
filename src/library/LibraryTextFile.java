@@ -13,6 +13,7 @@ package library;
 	import java.util.Scanner;
 	import java.text.ParseException;
 	import java.text.SimpleDateFormat;
+	import java.time.LocalDate;
 
 	public class LibraryTextFile {
 		
@@ -23,7 +24,8 @@ package library;
 		private static Book convertLineToItem(String line) throws ParseException {
 			String[] parts = line.split("\t");
 			//System.out.println(parts[0]+parts[1]+parts[2]+parts[3]);
-			SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy");
+			//SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy");
+			LocalDate date = LocalDate.now();
 			Book book = new Book();
 			book.setBookTitle(parts[0].trim());
 			book.setBookAuthor(parts[1].trim());

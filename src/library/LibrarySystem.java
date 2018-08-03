@@ -5,13 +5,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.time.LocalDate;
+
+
 
 public class LibrarySystem {
 
 	
 	static Scanner scnr = new Scanner(System.in);
 	
-	public static void main(String[] args) throws ParseException {
+	public static void main(String[] args) throws Exception {
 		
 		int menuOption;
 		String searchOption;
@@ -44,12 +47,13 @@ public class LibrarySystem {
 //				scnr.nextLine();
 
 			} else if (menuOption == 3) {
-				//checkoutBook();
+				checkoutBook(books);
 				isValid=false;
 
 			} else if(menuOption == 4) {
-				returnBook();
+				returnBook(books);
 				isValid=false;
+				
 
 			} else if(menuOption ==5) {
 				
@@ -70,15 +74,67 @@ public class LibrarySystem {
 	private static void checkoutBook(ArrayList<Book> books) throws Exception {
 		books = LibraryTextFile.readFile();
 		String bookTitle;
+		SimpleDateFormat dateFormat= new SimpleDateFormat("MM/dd/yyyy");
+//		Date dateNow = Date.
+		LocalDate date = LocalDate.now();
+		date = date.plusDays(14);
 		System.out.print("Enter the title : ");
-		bookTitle = scnr.next();
-		for (Book book : books) {
-			if(book.getBookTitle().contains(bookTitle) && book.getBookStatus().equals(Status.ONSHELF)) {
-				
-			}
+		bookTitle = scnr.next().toUpperCase();
+		int bookNum=0, checkoutNum;
+		ArrayList<Integer> matchingBooks = new ArrayList<>();
+		ArrayList<Integer> checkedOutBooks = new ArrayList<>();
+		ArrayList<Integer> availableBooks = new ArrayList<>();
+
+
+//		boolean isValid=false;
+		
+		for(int i=0; i<books.size();i++) {
+			if(books.get(i).getBookTitle().contains(bookTitle)) {
+				bookNum=i+1;
+				matchingBooks.add(bookNum);
+				System.out.println((i+1)+". "+books.get(i).getBookTitle()+ " by" +books.get(i).getBookAuthor());
+			} 
 		}
+//		if(matchingBooks.isEmpty()) {
+//			System.out.println("Sorry we don't have any matching books!");
+//		} else {
+//			System.out.print();
+//			if(checkoutNum<bookNums.size()) {
+		
+				System.out.println("Matching books : "+ matchingBooks);
+		if(!matchingBooks.isEmpty()) {
+			for(int num=0;num<matchingBooks.size();num++) {
+				if(books.get(matchingBooks.get(num)-1).getBookStatus().equals(Status.ONSHELF)) {
+					availableBooks.add(matchingBooks.get(num));
+					//System.out.println("Sorry the book "+books.get(num).getBookTitle()+" is already checked out");
+				}else if(books.get(matchingBooks.get(num)-1).getBookStatus().equals(Status.CHECKED_OUT)) {
+					checkedOutBooks.add(matchingBooks.get(num+1));
+				}
+			}
+		} else if(matchingBooks.isEmpty()) {
+			System.out.println("Sorry we don't have any matching books!");
+		}
+			System.out.println("Avaiable book numbers - "+availableBooks);
+				System.out.println("checkedout books - "+checkedOutBooks);
+
+			if(!availableBooks.isEmpty()) {
+				checkoutNum = Validator.getInteger(scnr, "Enter the book number: ");
+				for(int num=0;num<availableBooks.size();num++) {
+					if(availableBooks.contains(checkoutNum)) {
+						books.get(availableBooks.get(num)).setBookStatus(Status.CHECKED_OUT);
+						books.get(availableBooks.get(num)).setDueDate(date);
+						System.out.println("The book " +books.get(availableBooks.get(num)).getBookTitle()+" is due on "+date);
+				}else {
+					System.out.println("the book is not available");
+				}
+				}
+			}
+				if(matchingBooks.isEmpty()) {
+				System.out.println("Sorry all the books are checkedout!");
+				}
 		
 		
+		LibraryTextFile.writeFile(books);
 		
 	}
 	
@@ -93,10 +149,20 @@ public class LibrarySystem {
 		Date dateToday = new Date();
 		
 		for (Book book : books) {
-			
 			if(book.getBookTitle().contains(bookTitle) && book.getBookStatus().equals(Status.CHECKED_OUT)) {
+/*				int daysDue = book.getDueDate().compareTo(dateToday);
+				if(daysDue<=0)	{
 					book.setBookStatus(Status.ONSHELF);
-			} else {
+					book.setDueDate(null);
+				} else if (daysDue>0){
+					book.setBookStatus(Status.ONSHELF);
+					book.setDueDate(null);
+					System.out.println("The book titled "+book.getBookTitle()+" is overdue by "+ daysDue+ " days");
+				}*/
+				book.setBookStatus(Status.ONSHELF);
+				book.setDueDate(null);
+				System.out.println("Thankyou! Come back soon.");
+			}else
 				System.out.println("You cannot return this book. Please see an associate for help.");
 			}
 			
@@ -104,7 +170,7 @@ public class LibrarySystem {
 		
 		//System.out.println("Thanks for donating a book!\nThe book "+ bookTitle + " by " + bookAuthor +" has been added to our Library.");
 		
-	}
+	
 	
 	private static void donateBook(ArrayList<Book> books) {
 		System.out.println("\nYou are awesome! Please enter the details of the book you are donating.");
