@@ -1,2 +1,2 @@
-Harry Potter and the Sorcerer's Stone 	J.K. Rowling	ONSHELF	null
-Five Little Pigs	Agatha Christie	ONSHELF	null
+FIVE LITTLE PIGS	AGATHA CHRISTIE	ONSHELF	null
+HARRY POTTER AND SORCERER'S STONE	J.K ROWLING	ONSHELF	null

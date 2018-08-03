@@ -1,6 +1,8 @@
 package library;
 
+import java.util.Date;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -65,13 +67,38 @@ public class LibrarySystem {
 		
 	} // end of main method
 	
+	private static void returnBook(ArrayList<Book> books) throws Exception {
+		books = LibraryTextFile.readFile();
+		String bookTitle;
+		System.out.println("\nHope you enjoyed the book!");
+		System.out.print("Please enter the title of the book you are returning: ");
+		bookTitle=scnr.nextLine().toUpperCase();
+		SimpleDateFormat dateFormat= new SimpleDateFormat("MM/dd/yyyy");
+//		Date dateNow = Date.
+		Date dateToday = new Date();
+		
+		for (Book book : books) {
+			
+			if(book.getBookTitle().contains(bookTitle) && book.getBookStatus().equals(Status.CHECKED_OUT)) {
+					book.setBookStatus(Status.ONSHELF);
+			} else {
+				System.out.println("You cannot return this book. Please see an associate for help.");
+			}
+			
+		}
+		
+		//System.out.println("Thanks for donating a book!\nThe book "+ bookTitle + " by " + bookAuthor +" has been added to our Library.");
+		
+	}
+	
 	private static void donateBook(ArrayList<Book> books) {
 		System.out.println("\nYou are awesome! Please enter the details of the book you are donating.");
 		String bookTitle, bookAuthor;
 		System.out.println("\nTitle: ");
-		bookTitle=scnr.nextLine();
+		bookTitle=scnr.nextLine().toUpperCase();
 				//"\nTitle   : ");
-		bookAuthor=Validator.getString(scnr, "\nAuthor  : ");
+		bookAuthor=Validator.getString(scnr, "\nAuthor  : ").toUpperCase();
+		
 		//SimpleDateFormat dateDonated= new SimpleDateFormat("MM/dd/yyyy");
 		Book newBook = new Book(bookTitle,bookAuthor,Status.ONSHELF,null);
 		books.add(newBook);
@@ -88,7 +115,7 @@ public class LibrarySystem {
 	public static void keywordList(ArrayList<Book> books) throws ParseException {
 		books = LibraryTextFile.readFile();
 		System.out.print("Enter the search keyword: ");
-		String keyword = scnr.next();
+		String keyword = scnr.next().toUpperCase();
 		for (Book book : books) {
 			if (book.getBookTitle().contains(keyword)) {
 				System.out.println(book.getBookTitle() +  " by " + book.getBookAuthor());
@@ -102,9 +129,8 @@ public class LibrarySystem {
 	public static void authorList(ArrayList<Book> books) throws ParseException {
 		books = LibraryTextFile.readFile();
 		System.out.print("Please enter the author you wish to search for: ");
-		String authorName = scnr.next();
+		String authorName = scnr.next().toUpperCase();
 		for (int i=0; i < books.size();i++) {
-			//for(Book book : books) {
 			if (books.get(i).getBookAuthor().contains(authorName)) {
 				System.out.println(books.get(i).getBookTitle() +  " by " + books.get(i).getBookAuthor());
 			}
@@ -114,6 +140,7 @@ public class LibrarySystem {
 	
 	// list the books by title
 	public static void bookList(ArrayList<Book> books) throws ParseException {
+		System.out.println("List of books in our Library!");
 		books = LibraryTextFile.readFile();
 		for (Book book : books) {
 			System.out.println(book.getBookTitle());
