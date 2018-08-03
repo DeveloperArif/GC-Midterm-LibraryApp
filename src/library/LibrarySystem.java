@@ -48,7 +48,7 @@ public class LibrarySystem {
 				isValid=false;
 
 			} else if(menuOption == 4) {
-				//returnBook();
+				returnBook();
 				isValid=false;
 
 			} else if(menuOption ==5) {
@@ -66,6 +66,21 @@ public class LibrarySystem {
 		
 		
 	} // end of main method
+	
+	private static void checkoutBook(ArrayList<Book> books) throws Exception {
+		books = LibraryTextFile.readFile();
+		String bookTitle;
+		System.out.print("Enter the title : ");
+		bookTitle = scnr.next();
+		for (Book book : books) {
+			if(book.getBookTitle().contains(bookTitle) && book.getBookStatus().equals(Status.ONSHELF)) {
+				
+			}
+		}
+		
+		
+		
+	}
 	
 	private static void returnBook(ArrayList<Book> books) throws Exception {
 		books = LibraryTextFile.readFile();
