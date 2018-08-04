@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 
 
@@ -148,31 +149,38 @@ public class LibrarySystem {
 		bookTitle=scnr.nextLine().toUpperCase();
 		SimpleDateFormat dateFormat= new SimpleDateFormat("MM/dd/yyyy");
 //		Date dateNow = Date.
-		Date dateToday = new Date();
+	//	Date dateToday = new Date();
+		LocalDate date = LocalDate.now();
+		date = date.plusDays(7);
 		
 		for (Book book : books) {
 			if(book.getBookTitle().contains(bookTitle) && book.getBookStatus().equals(Status.CHECKED_OUT)) {
-/*				int daysDue = book.getDueDate().compareTo(dateToday);
-				if(daysDue<=0)	{
+				//int daysDue = book.getDueDate().(LocalDate.now());
+				if(LocalDate.now().isAfter(book.getDueDate()))	{
+				long daysLate = (ChronoUnit.DAYS.between(LocalDate.now(), book.getDueDate()));
+					//System.out.println(LocalDate.now());
 					book.setBookStatus(Status.ONSHELF);
 					book.setDueDate(null);
-				} else if (daysDue>0){
+					System.out.println("This book was overdue by " + daysLate + ". Thank you for returning.");
+			//	} else if (daysDue>0){
+				} else  
 					book.setBookStatus(Status.ONSHELF);
 					book.setDueDate(null);
-					System.out.println("The book titled "+book.getBookTitle()+" is overdue by "+ daysDue+ " days");
-				}*/
-				book.setBookStatus(Status.ONSHELF);
-				book.setDueDate(null);
-				System.out.println("Thankyou! Come back soon.");
-			}else
-				System.out.println("You cannot return this book. Please see an associate for help.");
-			}
+					System.out.println("Thank you! Come back soon.");
+				//	System.out.println("The book titled "+book.getBookTitle()+" is overdue by "+ LocalDate.now().compareTo(book.getDueDate())+ " days");
+				}
+			//	book.setBookStatus(Status.ONSHELF);
+			//	book.setDueDate(null);
+			//	System.out.println("Thank you! Come back soon.");
+		//	}else
+			//	System.out.println("You cannot return this book. Please see an associate for help.");
 			
+		
 		}
 		
 		//System.out.println("Thanks for donating a book!\nThe book "+ bookTitle + " by " + bookAuthor +" has been added to our Library.");
 		
-	
+		}
 	
 	private static void donateBook(ArrayList<Book> books) {
 		System.out.println("\nYou are awesome! Please enter the details of the book you are donating.");
