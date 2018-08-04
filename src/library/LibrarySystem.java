@@ -103,14 +103,6 @@ public class LibrarySystem {
 					checkedOutBooks.put(bookEntry.getKey(), bookEntry.getValue());	
 				}
 			}
-			/*for(int num=0;num<matchingBooks.size();num++) {
-				if(books.get(matchingBooks.get(num)-1).getBookStatus().equals(Status.ONSHELF)) {
-					availableBooks.add(matchingBooks.get(num));
-					//System.out.println("Sorry the book "+books.get(num).getBookTitle()+" is already checked out");
-				}else if(books.get(matchingBooks.get(num)-1).getBookStatus().equals(Status.CHECKED_OUT)) {
-					checkedOutBooks.add(matchingBooks.get(num+1));
-				}
-			}*/
 		} else if(matchingBooks.isEmpty()) {
 			System.out.println("Sorry we don't have any matching books!");
 		} // end of match search
@@ -152,7 +144,72 @@ public class LibrarySystem {
 	//	Date dateToday = new Date();
 		LocalDate date = LocalDate.now();
 		date = date.plusDays(7);
+		int bookNum, checkInNum;
+		HashMap<Integer, Book> matchingBooks = new HashMap<>();
+		HashMap<Integer, Book> checkedOutBooks = new HashMap<>();
+		HashMap<Integer, Book> availableBooks = new HashMap<>();
+				
+		for(int i=0; i<books.size();i++) {
+			if(books.get(i).getBookTitle().contains(bookTitle)) {
+				bookNum=i+1;
+				matchingBooks.put(bookNum,books.get(i));
+				System.out.println((i+1)+". "+books.get(i).getBookTitle()+ " by" +books.get(i).getBookAuthor());
+			} 
+		} 
+	
+		System.out.println("Matching books : "+ matchingBooks.keySet());
+		if(!matchingBooks.isEmpty()) {
+			for(HashMap.Entry<Integer, Book> bookEntry:matchingBooks.entrySet()) {
+				if(bookEntry.getValue().getBookStatus().equals(Status.ONSHELF)) {
+					availableBooks.put(bookEntry.getKey(), bookEntry.getValue());	
+				}else if(bookEntry.getValue().getBookStatus().equals(Status.CHECKED_OUT)) {
+					checkedOutBooks.put(bookEntry.getKey(), bookEntry.getValue());	
+				}
+			}
+		} else if(matchingBooks.isEmpty()) {
+			System.out.println("Sorry we don't have any matching books!");
+		} // end of match search
 		
+		if(matchingBooks.size() == availableBooks.size()) {
+			System.out.println("Sorry all the books are out at this time. Please check back later!");
+		}
+		
+		System.out.println("Avaiable book numbers - "+availableBooks.keySet());
+		System.out.println("checkedout books - "+checkedOutBooks.keySet());
+
+		if(!checkedOutBooks.isEmpty()) {
+			checkInNum = Validator.getInteger(scnr, "Enter the book number: ");
+			if(checkedOutBooks.containsKey(checkInNum)) {
+				for(HashMap.Entry<Integer, Book> bookEntry:checkedOutBooks.entrySet()) {
+					if(bookEntry.getKey() == checkInNum) {
+						if(LocalDate.now().isAfter(bookEntry.getValue().getDueDate()))	{
+							long daysLate = (ChronoUnit.DAYS.between(LocalDate.now(), bookEntry.getValue().getDueDate()));
+								//System.out.println(LocalDate.now());
+								bookEntry.getValue().setBookStatus(Status.ONSHELF);
+								bookEntry.getValue().setDueDate(null);
+								LibraryTextFile.writeFile(books);
+								System.out.println("This book was overdue by " + Math.abs(daysLate) + "days. Thank you for returning.");
+						//	} else if (daysDue>0){
+							} else  {
+								bookEntry.getValue().setBookStatus(Status.ONSHELF);
+								bookEntry.getValue().setDueDate(null);
+								LibraryTextFile.writeFile(books);
+								System.out.println("Thank you! Come back soon.");
+							//	System.out.println("The book titled "+book.getBookTitle()+" is overdue by "+ LocalDate.now().compareTo(book.getDueDate())+ " days");
+							}
+						bookEntry.getValue().setBookStatus(Status.ONSHELF);	
+						bookEntry.getValue().setDueDate(null);
+						System.out.println("The book " +bookEntry.getValue().getBookTitle()+" is returned.");
+					}				
+				}
+			} else 
+				System.out.println("Sorry the book is already on the shelf!");
+		}else
+			System.out.println("All books are on shelf! Please checkout book of your choice.");
+		
+		LibraryTextFile.writeFile(books);
+		
+	/*	
 		for (Book book : books) {
 			if(book.getBookTitle().contains(bookTitle) && book.getBookStatus().equals(Status.CHECKED_OUT)) {
 				//int daysDue = book.getDueDate().(LocalDate.now());
@@ -181,7 +238,7 @@ public class LibrarySystem {
 		}
 		
 		//System.out.println("Thanks for donating a book!\nThe book "+ bookTitle + " by " + bookAuthor +" has been added to our Library.");
-		
+		*/
 		}
 	
 	private static void donateBook(ArrayList<Book> books) {
