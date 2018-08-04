@@ -167,6 +167,7 @@ public class LibrarySystem {
 				} else  
 					book.setBookStatus(Status.ONSHELF);
 					book.setDueDate(null);
+					LibraryTextFile.writeFile(books);
 					System.out.println("Thank you! Come back soon.");
 				//	System.out.println("The book titled "+book.getBookTitle()+" is overdue by "+ LocalDate.now().compareTo(book.getDueDate())+ " days");
 				}
