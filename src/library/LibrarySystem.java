@@ -1,6 +1,7 @@
 package library;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,64 +76,65 @@ public class LibrarySystem {
 		books = LibraryTextFile.readFile();
 		String bookTitle;
 		SimpleDateFormat dateFormat= new SimpleDateFormat("MM/dd/yyyy");
-//		Date dateNow = Date.
 		LocalDate date = LocalDate.now();
 		date = date.plusDays(14);
 		System.out.print("Enter the title : ");
 		bookTitle = scnr.next().toUpperCase();
 		int bookNum=0, checkoutNum;
-		ArrayList<Integer> matchingBooks = new ArrayList<>();
-		ArrayList<Integer> checkedOutBooks = new ArrayList<>();
-		ArrayList<Integer> availableBooks = new ArrayList<>();
-
-
-//		boolean isValid=false;
-		
+		HashMap<Integer, Book> matchingBooks = new HashMap<>();
+		HashMap<Integer, Book> checkedOutBooks = new HashMap<>();
+		HashMap<Integer, Book> availableBooks = new HashMap<>();
+				
 		for(int i=0; i<books.size();i++) {
 			if(books.get(i).getBookTitle().contains(bookTitle)) {
 				bookNum=i+1;
-				matchingBooks.add(bookNum);
+				matchingBooks.put(bookNum,books.get(i));
 				System.out.println((i+1)+". "+books.get(i).getBookTitle()+ " by" +books.get(i).getBookAuthor());
 			} 
-		}
-//		if(matchingBooks.isEmpty()) {
-//			System.out.println("Sorry we don't have any matching books!");
-//		} else {
-//			System.out.print();
-//			if(checkoutNum<bookNums.size()) {
-		
-				System.out.println("Matching books : "+ matchingBooks);
+		} 
+	
+		System.out.println("Matching books : "+ matchingBooks.keySet());
 		if(!matchingBooks.isEmpty()) {
-			for(int num=0;num<matchingBooks.size();num++) {
+			for(HashMap.Entry<Integer, Book> bookEntry:matchingBooks.entrySet()) {
+				if(bookEntry.getValue().getBookStatus().equals(Status.ONSHELF)) {
+					availableBooks.put(bookEntry.getKey(), bookEntry.getValue());	
+				}else if(bookEntry.getValue().getBookStatus().equals(Status.CHECKED_OUT)) {
+					checkedOutBooks.put(bookEntry.getKey(), bookEntry.getValue());	
+				}
+			}
+			/*for(int num=0;num<matchingBooks.size();num++) {
 				if(books.get(matchingBooks.get(num)-1).getBookStatus().equals(Status.ONSHELF)) {
 					availableBooks.add(matchingBooks.get(num));
 					//System.out.println("Sorry the book "+books.get(num).getBookTitle()+" is already checked out");
 				}else if(books.get(matchingBooks.get(num)-1).getBookStatus().equals(Status.CHECKED_OUT)) {
 					checkedOutBooks.add(matchingBooks.get(num+1));
 				}
-			}
+			}*/
 		} else if(matchingBooks.isEmpty()) {
 			System.out.println("Sorry we don't have any matching books!");
-		}
-			System.out.println("Avaiable book numbers - "+availableBooks);
-				System.out.println("checkedout books - "+checkedOutBooks);
-
-			if(!availableBooks.isEmpty()) {
-				checkoutNum = Validator.getInteger(scnr, "Enter the book number: ");
-				for(int num=0;num<availableBooks.size();num++) {
-					if(availableBooks.contains(checkoutNum)) {
-						books.get(availableBooks.get(num)).setBookStatus(Status.CHECKED_OUT);
-						books.get(availableBooks.get(num)).setDueDate(date);
-						System.out.println("The book " +books.get(availableBooks.get(num)).getBookTitle()+" is due on "+date);
-				}else {
-					System.out.println("the book is not available");
-				}
-				}
-			}
-				if(matchingBooks.isEmpty()) {
-				System.out.println("Sorry all the books are checkedout!");
-				}
+		} // end of match search
 		
+		if(matchingBooks.size() == checkedOutBooks.size()) {
+			System.out.println("Sorry all the books are out at this time. Please check back later!");
+		}
+		
+		System.out.println("Avaiable book numbers - "+availableBooks.keySet());
+		System.out.println("checkedout books - "+checkedOutBooks.keySet());
+
+		if(!availableBooks.isEmpty()) {
+			checkoutNum = Validator.getInteger(scnr, "Enter the book number: ");
+			if(availableBooks.containsKey(checkoutNum)) {
+				for(HashMap.Entry<Integer, Book> bookEntry:availableBooks.entrySet()) {
+					if(bookEntry.getKey() == checkoutNum) {
+						bookEntry.getValue().setBookStatus(Status.CHECKED_OUT);	
+						bookEntry.getValue().setDueDate(date);
+						System.out.println("The book " +bookEntry.getValue().getBookTitle()+" is due on "+date);
+					}				
+				}
+			} else 
+				System.out.println("Sorry the book you requested is not available!");
+		}else
+			System.out.println("All books are checkout out ! Please visit later");
 		
 		LibraryTextFile.writeFile(books);
 		
