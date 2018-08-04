@@ -24,7 +24,7 @@ package library;
 		private static Book convertLineToItem(String line) throws ParseException {
 			String[] parts = line.split("\t");
 			//System.out.println(parts[0]+parts[1]+parts[2]+parts[3]);
-			//SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy");
+	//		SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy");
 			LocalDate date = LocalDate.now();
 			Book book = new Book();
 			book.setBookTitle(parts[0].trim());
