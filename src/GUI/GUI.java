@@ -1,7 +1,9 @@
-package library;
+package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -32,15 +34,23 @@ public class GUI {
 		panel.add(donateButton);
 		panel.add(exitButton);
 		frame.add(panel,BorderLayout.CENTER);
-		/*frame.add(new JButton("List Books"));
-		frame.add(new JButton("Search Catalog"));
-		frame.add(new JButton("Checkout Books"));
-		frame.add(new JButton("Return Books"));
-		frame.add(new JButton("Donate Books"));
-		frame.add(new JButton("Exit"));*/
+		
+		donateButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				DonateBookGUI.main(null);
+			}
+		});
+		
+		exitButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();				
+			}
+		});
 
-
-	
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

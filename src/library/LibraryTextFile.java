@@ -135,41 +135,6 @@ package library;
 				}
 			}
 		}
-		
-/*		public static List<Book> readFile_theOldPainfulWay() throws ParseException {
-			List<Book> items = new ArrayList<>();
-			
-			FileInputStream fileInputStream = null;
-			Scanner fileScanner = null;
-			try {
-				fileInputStream = new FileInputStream(FILE_NAME);
-				fileScanner = new Scanner(fileInputStream);
-				
-				while (fileScanner.hasNextLine()) {
-					String line = fileScanner.nextLine();
-					items.add( convertLineToItem(line) );
-				}
-			
-				return items;
-			} catch (FileNotFoundException ex) {
-				return items;
-			} finally {
-				// whether or not there is an exception, make sure to close the scanner.
-				if (fileScanner != null) {
-					fileScanner.close();
-				}
-				// whether or not there is an exception, make sure to close the input stream.
-				if (fileInputStream != null) {
-					try {
-						fileInputStream.close();
-					} catch (IOException e) {
-						// annoyingly, even closing the stream can cause an error. We have to catch that too!
-						System.err.println("Failed to close stream. :(");
-						e.printStackTrace();
-					}
-				}
-			}
-		}*/
 
 	}
 	
