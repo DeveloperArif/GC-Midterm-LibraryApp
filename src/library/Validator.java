@@ -20,7 +20,6 @@ public class Validator {
 			}
 		} while(!isValid);
 		return sc.nextInt();
-		
 	}
 	// overloaded method with different set of parameters. 
 	//This checks if the user has entered an integer within the range mentioned.

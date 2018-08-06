@@ -47,7 +47,7 @@ public class DonateBookGUI {
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.getContentPane().setLayout(null);
 	
-	JLabel label = new JLabel("Welcome To Grand Circus Library");
+	JLabel label = new JLabel("           Welcome To Grand Circus Library");
 	label.setFont(new Font("Times New Roman", Font.BOLD, 18));
 	label.setBounds(27, 26, 397, 29);
 	frame.getContentPane().add(label);
@@ -105,7 +105,7 @@ public class DonateBookGUI {
 	btnBack.setBounds(232, 215, 123, 23);
 	frame.getContentPane().add(btnBack);
 	
-	JLabel lblUserPage = new JLabel("Add Book");
+	JLabel lblUserPage = new JLabel("Donate a Book");
 	lblUserPage.setFont(new Font("Times New Roman", Font.BOLD, 18));
 	lblUserPage.setBounds(165, 66, 178, 29);
 	frame.getContentPane().add(lblUserPage);

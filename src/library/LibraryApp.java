@@ -30,7 +30,7 @@ public class LibraryApp {
 				if (searchOption.equalsIgnoreCase("author")) {
 					LibrarySystem.authorList(books);
 				} else { 
-					LibrarySystem.keywordList(books);
+					LibrarySystem.keywordSearch(books);
 				}
 				isValid=false;
 			} else if (menuOption == 3) {
