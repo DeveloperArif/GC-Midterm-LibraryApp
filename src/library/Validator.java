@@ -2,6 +2,7 @@ package library;
 //@ Sasikaladevi Kumarasamy
 
 
+import java.util.InputMismatchException;
 // this program checks for validity of many types of data, each in a different method. 
 // It even checks if the user input data is within range mentioned or not(where applicable)
 import java.util.Scanner;
@@ -12,14 +13,23 @@ public class Validator {
 	//This checks if the user has entered an integer or not. Returns the valid number.
 	public static int getInteger(Scanner sc, String prompt) {
 		boolean isValid = false;
-		do {
-			System.out.print(prompt);
-			isValid = sc.hasNextInt();
-			if(!isValid) {
-				System.out.println("Invaild entry. Please try again!");
-			}
-		} while(!isValid);
-		return sc.nextInt();
+	//	do {
+	//		System.out.print(prompt);
+	//		isValid = sc.hasNextInt();
+	//		if(!isValid) {
+	//			System.out.println("Invaild entry. Please try again!");
+	//		}
+	//	} while(!isValid);
+	//	return sc.nextInt();
+		
+		try {
+			System.out.println(prompt);
+			return sc.nextInt();
+		} catch (InputMismatchException ex) {
+			System.out.println("Invalid number. Please enter a valid interger!");
+			sc.nextLine();
+			return getInteger(sc, prompt);
+		}
 	}
 	// overloaded method with different set of parameters. 
 	//This checks if the user has entered an integer within the range mentioned.

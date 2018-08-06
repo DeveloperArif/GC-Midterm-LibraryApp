@@ -58,6 +58,10 @@ public class Book {
 	public String toString() {
 		return "Book [bookTitle=" + bookTitle + ", bookStatus=" + bookStatus + "]";
 	}
+	public static Book get(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 }
