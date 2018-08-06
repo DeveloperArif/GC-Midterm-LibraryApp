@@ -51,10 +51,10 @@ public class ListBooksGUI {
 					frame.getContentPane().setLayout(null);
 					frame.setVisible(true);
 
-					JLabel label = new JLabel("Current Library Book List");
+					JLabel label = new JLabel("Grand Circus Library - Current Library Book List");
 					label.setHorizontalAlignment(SwingConstants.CENTER);
 					label.setFont(new Font("Times New Roman", Font.BOLD, 20));
-					label.setBounds(230, 8, 390, 29);
+					label.setBounds(130, 18, 490, 29);
 					frame.getContentPane().add(label);
 				
 					System.out.println(books);
