@@ -39,10 +39,11 @@ public class LibrarySystem {
 		} 
 	
 //		System.out.println("Matching books : "+ matchingBooks.keySet());
-		
+		do {
 		if(matchingBooks.isEmpty()) {
 			System.out.println("Sorry we don't have any matching books!");
-		}else if(!matchingBooks.isEmpty()) {
+			break;			
+		}else {
 			for(HashMap.Entry<Integer, Book> bookEntry:matchingBooks.entrySet()) {
 				if(bookEntry.getValue().getBookStatus().equals(Status.ONSHELF)) {
 					availableBooks.put(bookEntry.getKey(), bookEntry.getValue());	
@@ -58,10 +59,9 @@ public class LibrarySystem {
 		} 
 
 		System.out.println("Avaiable book numbers - "+availableBooks.keySet());
-//		System.out.println("checkedout books - "+checkedOutBooks.keySet());
 		do {
 		if(!availableBooks.isEmpty()) {
-			checkoutNum = Validator.getInteger(scnr, "Enter the book number: " );
+			checkoutNum = Validator.getInteger(scnr, "Enter a book number: " );
 			if(availableBooks.containsKey(checkoutNum)) {
 				for(HashMap.Entry<Integer, Book> bookEntry:availableBooks.entrySet()) {
 					if(bookEntry.getKey() == checkoutNum) {
@@ -78,6 +78,8 @@ public class LibrarySystem {
 			}
 		}else
 			System.out.println("All books are checked out ! Please visit later");
+		}while(!isValid);
+		System.out.println("Thanks for checking out! Enjoy reading");
 		}while(!isValid);
 		scnr.nextLine();
 
@@ -105,9 +107,12 @@ public class LibrarySystem {
 				System.out.println((i+1)+". "+books.get(i).getBookTitle()+ " by" +books.get(i).getBookAuthor());
 			} 
 		} 
-	
+		do {
 //		System.out.println("Matching books : "+ matchingBooks.keySet());
-		if(!matchingBooks.isEmpty()) {
+		if(matchingBooks.isEmpty()) {
+			System.out.println("Sorry we don't have any matching books!");
+			break;
+		}else {
 			for(HashMap.Entry<Integer, Book> bookEntry:matchingBooks.entrySet()) {
 				if(bookEntry.getValue().getBookStatus().equals(Status.ONSHELF)) {
 					availableBooks.put(bookEntry.getKey(), bookEntry.getValue());	
@@ -115,9 +120,7 @@ public class LibrarySystem {
 					checkedOutBooks.put(bookEntry.getKey(), bookEntry.getValue());	
 				}
 			}
-		} else if(matchingBooks.isEmpty()) {
-			System.out.println("Sorry we don't have any matching books!");
-		} // end of match search
+		}   // end of match search
 		
 		if(matchingBooks.size() == availableBooks.size()) {
 			System.out.println("Sorry all the books are out at this time. Please check back later!");
@@ -143,9 +146,6 @@ public class LibrarySystem {
 								LibraryTextFile.writeFile(books);
 								System.out.println("Thank you! Come back soon.");
 							}
-						bookEntry.getValue().setBookStatus(Status.ONSHELF);	
-						bookEntry.getValue().setDueDate(null);
-						System.out.println("The book " +bookEntry.getValue().getBookTitle()+" is returned.");
 					}
 					isValid=true;
 				}
@@ -157,7 +157,8 @@ public class LibrarySystem {
 			System.out.println("All books are on shelf! Please checkout book of your choice.");
 		}while(!isValid);
 		LibraryTextFile.writeFile(books);
-		scnr.nextLine();
+		}while(!isValid);
+//		scnr.nextLine();
 		
 	}
 	
@@ -216,7 +217,7 @@ public class LibrarySystem {
 		System.out.println("\nList of books in our Library!\n---- -- ----- -- --- --------");
 		books = LibraryTextFile.readFile();
 		for (int i=0;i<books.size();i++) {
-			System.out.println(i+1+") "+books.get(i).getBookTitle()+"\t"+books.get(i).getBookStatus());
+			System.out.println(i+1+") "+books.get(i).getBookTitle()+"\t ("+books.get(i).getBookStatus()+")");
 		}
 		scnr.nextLine();
 	}

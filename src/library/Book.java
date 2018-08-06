@@ -54,6 +54,10 @@ public class Book {
 	public void setBookStatus(Status bookStatus) {
 		this.bookStatus = bookStatus;
 	}
+	@Override
+	public String toString() {
+		return "Book [bookTitle=" + bookTitle + ", bookStatus=" + bookStatus + "]";
+	}
 	
 
 }

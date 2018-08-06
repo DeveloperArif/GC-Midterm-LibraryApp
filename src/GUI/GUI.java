@@ -42,6 +42,15 @@ public class GUI {
 				DonateBookGUI.main(null);
 			}
 		});
+	
+		returnButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				ReturnBookGUI.main(null);
+			}
+		});
+		
 		
 		exitButton.addActionListener(new ActionListener() {
 			

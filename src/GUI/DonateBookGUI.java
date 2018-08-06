@@ -52,6 +52,7 @@ public class DonateBookGUI {
 	label.setBounds(27, 26, 397, 29);
 	frame.getContentPane().add(label);
 	JButton btnAddForBook = new JButton("Donate Book");
+	
 	btnAddForBook.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			File fileName = new File("book.txt");
