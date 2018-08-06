@@ -7,8 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import com.sun.prism.MaskTextureGraphics;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 

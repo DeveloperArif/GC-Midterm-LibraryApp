@@ -35,6 +35,15 @@ public class GUI {
 		panel.add(exitButton);
 		frame.add(panel,BorderLayout.CENTER);
 		
+		listButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				ListBooksGUI.main(null);
+			}
+		});
+		
+		
 		checkoutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -59,6 +68,8 @@ public class GUI {
 				DonateBookGUI.main(null);
 			}
 		});
+		
+		
 	
 		returnButton.addActionListener(new ActionListener() {
 			@Override

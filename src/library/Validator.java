@@ -12,6 +12,7 @@ public class Validator {
 	// overloaded method with different set of parameters. 
 	//This checks if the user has entered an integer or not. Returns the valid number.
 	public static int getInteger(Scanner sc, String prompt) {
+
 //		boolean isValid = false;
 		try {
 			System.out.print(prompt);
@@ -21,15 +22,8 @@ public class Validator {
 			sc.nextLine();
 			return getInteger(sc,prompt);
 		}
-		/*do {
-			System.out.print(prompt);
-			isValid = sc.hasNextInt();
-			if(!isValid) {
-				System.out.println("Invaild entry. Please try again!");
-			}*/
-//		} while(!isValid);
-//		return sc.nextInt();
 	}
+
 	// overloaded method with different set of parameters. 
 	//This checks if the user has entered an integer within the range mentioned.
 
