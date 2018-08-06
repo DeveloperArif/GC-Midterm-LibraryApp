@@ -30,7 +30,7 @@ import library.LibraryTextFile;
 import library.Status;
 import library.Validator;
 
-public class ReturnBookGUI {
+public class CheckoutBookGUI {
 	private static JFrame frame;
 	private static JTextField keywordField;
 	private static JTextField bookNumField;
@@ -51,7 +51,7 @@ public class ReturnBookGUI {
 							e.printStackTrace();
 						}
 					    	
-						ReturnBookGUI window = new ReturnBookGUI(books);
+						CheckoutBookGUI window = new CheckoutBookGUI(books);
 						window.frame.setVisible(true);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -59,7 +59,7 @@ public class ReturnBookGUI {
 				}
 			});
 		}
-		public ReturnBookGUI(ArrayList<Book> books) {
+		public CheckoutBookGUI(ArrayList<Book> books) {
 			RtrnBookGUI(books);
 		}
 
@@ -69,18 +69,19 @@ public class ReturnBookGUI {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel label = new JLabel("Grand Circus Library - Return a book");
+		JLabel label = new JLabel("Grand Circus Library - Checkout a book");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		label.setBounds(200, 8, 397, 29);
 		frame.getContentPane().add(label);
-		JButton btnForReturnBook = new JButton("Return");
+		JButton btnForReturnBook = new JButton("Checkout");
 		JButton btnForSearchBook = new JButton("Search");
 		
 		btnForSearchBook.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				boolean isValid = false;
 				File fileName = new File("book.txt");
 			    String keyword = keywordField.getText().trim().toUpperCase();
 				int bookNum;
@@ -108,8 +109,10 @@ public class ReturnBookGUI {
 						resultField.append((i+1)+". "+books.get(i).getBookTitle()+"("+books.get(i).getBookStatus()+")\n");
 					} 
 				}
+				do {
 				if(matchingBooks.isEmpty()) {
 					JOptionPane.showMessageDialog(frame, "Sorry we don't have any matching books!", "No Match", JOptionPane.WARNING_MESSAGE);
+					break;
 				}else {
 					for(HashMap.Entry<Integer, Book> bookEntry:matchingBooks.entrySet()) {
 						if(bookEntry.getValue().getBookStatus().equals(Status.ONSHELF)) {
@@ -119,9 +122,11 @@ public class ReturnBookGUI {
 						}
 					}
 				}
-				if(matchingBooks.size() == checkedOutBooks.size()) {
-					JOptionPane.showMessageDialog(frame, "Sorry all the books are on shelf!. Please checkout book f your choice!", "All Books are in!", JOptionPane.WARNING_MESSAGE);
+				if(matchingBooks.size() == availableBooks.size()) {
+					JOptionPane.showMessageDialog(frame, "Sorry all the books are on shelf!. Please checkout book of your choice!", "All Books are in!", JOptionPane.WARNING_MESSAGE);
+					break;
 				}
+				}while(!isValid);
 				btnForReturnBook.setEnabled(true);
 				bookNumField.setEnabled(true);
 				}
@@ -131,6 +136,8 @@ public class ReturnBookGUI {
 		btnForReturnBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean isValid = false;
+				LocalDate date = LocalDate.now();
+				date = date.plusDays(14);
 
 				File fileName = new File("book.txt");
 				int bookNum = 0;
@@ -149,43 +156,34 @@ public class ReturnBookGUI {
 						}
 					}
 
-						System.out.println(books);
 						do {
-						if(!checkedOutBooks.isEmpty()) {
+						if(!availableBooks.isEmpty()) {
 							try {
 							bookNum = Integer.parseInt(bookNumField.getText());
 							}catch(Exception ex) {
 					    		JOptionPane.showMessageDialog(frame,"Invalid Input!","Error!",JOptionPane.ERROR_MESSAGE);
 								isValid=false;
 							}
-							if(checkedOutBooks.containsKey(bookNum)) {
-								for(HashMap.Entry<Integer, Book> bookEntry:checkedOutBooks.entrySet()) {
+							if(availableBooks.containsKey(bookNum)) {
+								for(HashMap.Entry<Integer, Book> bookEntry:availableBooks.entrySet()) {
 									if(bookEntry.getKey() == bookNum) {
-										if((bookEntry.getValue().getDueDate() !=null) && (LocalDate.now().isAfter(bookEntry.getValue().getDueDate())))	{
-											long daysLate = (ChronoUnit.DAYS.between(LocalDate.now(), bookEntry.getValue().getDueDate()));
-												bookEntry.getValue().setBookStatus(Status.ONSHELF);
-												bookEntry.getValue().setDueDate(null);
-												JOptionPane.showMessageDialog(frame, "This book is overdue by "+daysLate+" days", "Overdue!", JOptionPane.WARNING_MESSAGE);
-												LibraryTextFile.writeFile(books);
-												isValid=true;
-											} else  {
-												bookEntry.getValue().setBookStatus(Status.ONSHELF);
-												bookEntry.getValue().setDueDate(null);
-												LibraryTextFile.writeFile(books);
-												JOptionPane.showMessageDialog(frame, "Hope you enjoyed the book. Thanks", "Done!", JOptionPane.OK_OPTION);
-												isValid = true;
-											}
-									}
+										bookEntry.getValue().setBookStatus(Status.CHECKED_OUT);	
+										bookEntry.getValue().setDueDate(date);
+										JOptionPane.showMessageDialog(frame, "Hope you enjoy the book.Your book is due on "+date+" .", "Done!", JOptionPane.OK_OPTION);
+										LibraryTextFile.writeFile(books);
+										isValid = true;
+									}				
 								}
-							}else {
-								JOptionPane.showMessageDialog(frame, "The book is already on the shelf!", "Already on Shelf", JOptionPane.WARNING_MESSAGE);
+							}  else {
+								JOptionPane.showMessageDialog(frame, "The book is already checked out!", "Already on Shelf", JOptionPane.WARNING_MESSAGE);
 								isValid = true;
 							}
-								
-						} /*else {
-							JOptionPane.showMessageDialog(frame, "No book found!","No matching book", JOptionPane.OK_OPTION);
-							isValid = true;
-						}*/
+									
+						}else {
+							JOptionPane.showMessageDialog(frame, "Sorry we don't have that book!", "Done!", JOptionPane.OK_OPTION);
+
+								isValid = true;
+						} 
 								
 					} while(!isValid);
 						LibraryTextFile.writeFile(books);
