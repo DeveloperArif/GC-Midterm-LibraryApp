@@ -99,7 +99,7 @@ public class DonateBookGUI {
 	btnBack.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			frame.dispose();
-			GUI.main(null);
+			MainGUIApp.main(null);
 		}
 	});
 	btnBack.setFont(new Font("Times New Roman", Font.BOLD, 15));

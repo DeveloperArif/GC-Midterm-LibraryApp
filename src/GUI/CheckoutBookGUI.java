@@ -36,6 +36,7 @@ public class CheckoutBookGUI {
 	private static JTextField keywordField;
 	private static JTextField bookNumField;
 	private static JTextArea resultField;
+	
 	private static HashMap<Integer, Book> matchingBooks = new HashMap<>();
 	private static HashMap<Integer, Book> checkedOutBooks = new HashMap<>();
 	private static HashMap<Integer, Book> availableBooks = new HashMap<>();
@@ -75,34 +76,30 @@ public class CheckoutBookGUI {
 		label.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		label.setBounds(200, 8, 397, 29);
 		frame.getContentPane().add(label);
+		
+		
 		JButton btnForCheckoutBook = new JButton("Checkout");
 		JButton btnForSearchBook = new JButton("Search");
 		
+		resultField = new JTextArea();
+			
 		btnForSearchBook.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				boolean isValid = false;
-				File fileName = new File("book.txt");
 			    String keyword = keywordField.getText().trim().toUpperCase();
 				int bookNum;
-		    	
-			    	if(keywordField.getText().isEmpty() || !bookNumField.getText().isEmpty() )
-			    	{
+		    	if(keywordField.getText().isEmpty() || !bookNumField.getText().isEmpty()) {
 			    		JOptionPane.showMessageDialog(frame,"Invalid Input!","Error!",JOptionPane.ERROR_MESSAGE);
-			    		return;
-			    	}
+			    }
 		    	
-		    
-			    if(!fileName.exists()){
-				    try {
-						fileName.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-//			    do {
-				resultField.setText(null);
+		    	resultField.setText(null);
+				resultField.setEditable(false);
+				resultField.setColumns(10);
+				resultField.setBounds(120, 80, 600, 250);
+				resultField.setLineWrap(true);
+				resultField.setWrapStyleWord(true);
+				
 				for(int i=0; i<books.size();i++) {
 					if(books.get(i).getBookTitle().contains(keyword)) {
 						bookNum=i+1;
@@ -110,10 +107,10 @@ public class CheckoutBookGUI {
 						resultField.append((i+1)+". "+books.get(i).getBookTitle()+"("+books.get(i).getBookStatus()+")\n");
 					} 
 				}
+//				System.out.println(matchingBooks);
 				
 				if(matchingBooks.isEmpty()) {
 					JOptionPane.showMessageDialog(frame, "Sorry we don't have any matching books!", "No Match", JOptionPane.WARNING_MESSAGE);
-//					isValid=true;
 				}else {
 					for(HashMap.Entry<Integer, Book> bookEntry:matchingBooks.entrySet()) {
 						if(bookEntry.getValue().getBookStatus().equals(Status.ONSHELF)) {
@@ -123,11 +120,7 @@ public class CheckoutBookGUI {
 						}
 					}
 				}
-				if(matchingBooks.size() == checkedOutBooks.size()) {
-					JOptionPane.showMessageDialog(frame, "Sorry all the books are on shelf!. Please checkout book of your choice!", "All Books are in!", JOptionPane.WARNING_MESSAGE);
-//					break;
-				}
-//				}while(!isValid);
+				
 				btnForCheckoutBook.setEnabled(true);
 				bookNumField.setEnabled(true);
 				}
@@ -139,8 +132,6 @@ public class CheckoutBookGUI {
 				boolean isValid = false;
 				LocalDate date = LocalDate.now();
 				date = date.plusDays(14);
-
-//				File fileName = new File("book.txt");
 				int bookNum = 0;
 	     	
 			    	if(bookNumField.getText().isEmpty())
@@ -149,45 +140,36 @@ public class CheckoutBookGUI {
 			    		return;
 			    	}
 
-/*		    	if(!fileName.exists()){
-					    try {
-							fileName.createNewFile();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}*/
-
-//						do {
+						do {
 						if(!availableBooks.isEmpty()) {
 							try {
 							bookNum = Integer.parseInt(bookNumField.getText());
 							}catch(Exception ex) {
 					    		JOptionPane.showMessageDialog(frame,"Invalid Input!","Error!",JOptionPane.ERROR_MESSAGE);
-//								isValid=false;
+								isValid=false;
 							}
 							if(availableBooks.containsKey(bookNum)) {
 								for(HashMap.Entry<Integer, Book> bookEntry:availableBooks.entrySet()) {
 									if(bookEntry.getKey() == bookNum) {
 										bookEntry.getValue().setBookStatus(Status.CHECKED_OUT);	
 										bookEntry.getValue().setDueDate(date);
-										JOptionPane.showMessageDialog(frame, "Hope you enjoy the book.Your book is due on "+date+" .", "Done!", JOptionPane.OK_OPTION);
+										JOptionPane.showMessageDialog(frame, "Hope you enjoy the book.Your book is due on "+date+" .", "Done!", JOptionPane.PLAIN_MESSAGE);
 										LibraryTextFile.writeFile(books);
-//										isValid = true;
+										isValid = true;
 									}				
 								}
 							}  else {
 								JOptionPane.showMessageDialog(frame, "The book is already checked out!", "Already on Shelf", JOptionPane.WARNING_MESSAGE);
-//								isValid = true;
+								isValid = true;
 							}
 									
 						}else {
 							JOptionPane.showMessageDialog(frame, "Sorry we don't have that book!", "Done!", JOptionPane.OK_OPTION);
 
-//								isValid = true;
+								isValid = true;
 						} 
 								
-//					} while(!isValid);
-//						LibraryTextFile.writeFile(books);
+					} while(!isValid);
 
 			}
 		});
@@ -196,7 +178,7 @@ public class CheckoutBookGUI {
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.dispose();
-				GUI.main(null);
+				MainGUIApp.main(null);
 			}
 		});
 		

@@ -1,3 +1,5 @@
+//@ Sasi, Anesha and Arif
+
 package GUI;
 
 import java.awt.EventQueue;
@@ -74,6 +76,7 @@ public class ReturnBookGUI {
 		label.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		label.setBounds(200, 8, 397, 29);
 		frame.getContentPane().add(label);
+		
 		JButton btnForReturnBook = new JButton("Return");
 		JButton btnForSearchBook = new JButton("Search");
 		
@@ -81,24 +84,14 @@ public class ReturnBookGUI {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				File fileName = new File("book.txt");
 			    String keyword = keywordField.getText().trim().toUpperCase();
 				int bookNum;
-		    	
-			    	if(keywordField.getText().isEmpty() || !bookNumField.getText().isEmpty() )
-			    	{
-			    		JOptionPane.showMessageDialog(frame,"Invalid Input!","Error!",JOptionPane.ERROR_MESSAGE);
-			    		return;
-			    	}
-		    	
-		    
-			    if(!fileName.exists()){
-				    try {
-						fileName.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
+	    	
+		    	if(keywordField.getText().isEmpty() || !bookNumField.getText().isEmpty() )
+		    	{
+		    		JOptionPane.showMessageDialog(frame,"Invalid Input!","Error!",JOptionPane.ERROR_MESSAGE);
+		    		return;
+		    	}
 
 				resultField.setText(null);
 				for(int i=0; i<books.size();i++) {
@@ -108,6 +101,7 @@ public class ReturnBookGUI {
 						resultField.append((i+1)+". "+books.get(i).getBookTitle()+"("+books.get(i).getBookStatus()+")\n");
 					} 
 				}
+				
 				if(matchingBooks.isEmpty()) {
 					JOptionPane.showMessageDialog(frame, "Sorry we don't have any matching books!", "No Match", JOptionPane.WARNING_MESSAGE);
 				}else {
@@ -130,74 +124,63 @@ public class ReturnBookGUI {
 		
 		btnForReturnBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
 				boolean isValid = false;
-
-				File fileName = new File("book.txt");
 				int bookNum = 0;
 	     	
-			    	if(bookNumField.getText().isEmpty())
-			    	{
-			    		JOptionPane.showMessageDialog(frame,"Invalid Input!","Error!",JOptionPane.ERROR_MESSAGE);
-			    		return;
-			    	}
-
-		    	if(!fileName.exists()){
-					    try {
-							fileName.createNewFile();
-						} catch (IOException e) {
-							e.printStackTrace();
+		    	if(bookNumField.getText().isEmpty())
+		    	{
+		    		JOptionPane.showMessageDialog(frame,"Invalid Input!","Error!",JOptionPane.ERROR_MESSAGE);
+		    		return;
+		    	}
+//			System.out.println(books);
+			do {
+			if(!checkedOutBooks.isEmpty()) {
+				try {
+				bookNum = Integer.parseInt(bookNumField.getText());
+				}catch(Exception ex) {
+		    		JOptionPane.showMessageDialog(frame,"Invalid Input!","Error!",JOptionPane.ERROR_MESSAGE);
+					isValid=false;
+				}
+				if(checkedOutBooks.containsKey(bookNum)) {
+					for(HashMap.Entry<Integer, Book> bookEntry:checkedOutBooks.entrySet()) {
+						if(bookEntry.getKey() == bookNum) {
+							if((bookEntry.getValue().getDueDate() !=null) && (LocalDate.now().isAfter(bookEntry.getValue().getDueDate())))	{
+								long daysLate = (ChronoUnit.DAYS.between(LocalDate.now(), bookEntry.getValue().getDueDate()));
+									bookEntry.getValue().setBookStatus(Status.ONSHELF);
+									bookEntry.getValue().setDueDate(null);
+									JOptionPane.showMessageDialog(frame, "This book is overdue by "+daysLate+" days", "Overdue!", JOptionPane.WARNING_MESSAGE);
+									LibraryTextFile.writeFile(books);
+									isValid=true;
+								} else  {
+									bookEntry.getValue().setBookStatus(Status.ONSHELF);
+									bookEntry.getValue().setDueDate(null);
+									LibraryTextFile.writeFile(books);
+									JOptionPane.showMessageDialog(frame, "Hope you enjoyed the book. Thanks", "Done!", JOptionPane.PLAIN_MESSAGE);
+									isValid = true;
+								}
 						}
 					}
-
-						System.out.println(books);
-						do {
-						if(!checkedOutBooks.isEmpty()) {
-							try {
-							bookNum = Integer.parseInt(bookNumField.getText());
-							}catch(Exception ex) {
-					    		JOptionPane.showMessageDialog(frame,"Invalid Input!","Error!",JOptionPane.ERROR_MESSAGE);
-								isValid=false;
-							}
-							if(checkedOutBooks.containsKey(bookNum)) {
-								for(HashMap.Entry<Integer, Book> bookEntry:checkedOutBooks.entrySet()) {
-									if(bookEntry.getKey() == bookNum) {
-										if((bookEntry.getValue().getDueDate() !=null) && (LocalDate.now().isAfter(bookEntry.getValue().getDueDate())))	{
-											long daysLate = (ChronoUnit.DAYS.between(LocalDate.now(), bookEntry.getValue().getDueDate()));
-												bookEntry.getValue().setBookStatus(Status.ONSHELF);
-												bookEntry.getValue().setDueDate(null);
-												JOptionPane.showMessageDialog(frame, "This book is overdue by "+daysLate+" days", "Overdue!", JOptionPane.WARNING_MESSAGE);
-												LibraryTextFile.writeFile(books);
-												isValid=true;
-											} else  {
-												bookEntry.getValue().setBookStatus(Status.ONSHELF);
-												bookEntry.getValue().setDueDate(null);
-												LibraryTextFile.writeFile(books);
-												JOptionPane.showMessageDialog(frame, "Hope you enjoyed the book. Thanks", "Done!", JOptionPane.OK_OPTION);
-												isValid = true;
-											}
-									}
-								}
-							}else {
-								JOptionPane.showMessageDialog(frame, "The book is already on the shelf!", "Already on Shelf", JOptionPane.WARNING_MESSAGE);
-								isValid = true;
-							}
-								
-						} /*else {
-							JOptionPane.showMessageDialog(frame, "No book found!","No matching book", JOptionPane.OK_OPTION);
-							isValid = true;
-						}*/
-								
-					} while(!isValid);
-						LibraryTextFile.writeFile(books);
-
+				}else {
+					JOptionPane.showMessageDialog(frame, "The book is already on the shelf!", "Already on Shelf", JOptionPane.WARNING_MESSAGE);
+					isValid = true;
+				}
+					
+			} else {
+				JOptionPane.showMessageDialog(frame, "No book found!","No matching book", JOptionPane.OK_OPTION);
+				isValid = true;
 			}
-		});
+					
+		} while(!isValid);
+
+		}
+	});
 		
 		JButton btnBack = new JButton("Back");
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.dispose();
-				GUI.main(null);
+				MainGUIApp.main(null);
 			}
 		});
 		

@@ -1,3 +1,5 @@
+//@ Sasi, Anesha and Arif
+
 package GUI;
 
 import java.awt.EventQueue;
@@ -57,7 +59,6 @@ public class ListBooksGUI {
 					label.setBounds(130, 18, 490, 29);
 					frame.getContentPane().add(label);
 				
-					System.out.println(books);
 					resultField = new JTextArea();
 					resultField.setEditable(false);
 					resultField.setBounds(120, 80, 600, 300);
@@ -65,13 +66,11 @@ public class ListBooksGUI {
 					resultField.setWrapStyleWord(true);
 					resultField.getAutoscrolls();
 					
-					// resultField.setText(null);
 					    for (int i=0; i<books.size();i++) {
 					            resultField.append((i+1)+". "+books.get(i).getBookTitle()+"("+books.get(i).getBookStatus()+")\n");
 					        } 
 					    
-
-						frame.getContentPane().add(resultField);
+					frame.getContentPane().add(resultField);
 						
 					
 					JButton btnBack = new JButton("Back");
@@ -80,7 +79,7 @@ public class ListBooksGUI {
 					btnBack.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
 							frame.dispose();
-							GUI.main(null);
+							MainGUIApp.main(null);
 						}
 					});
 				

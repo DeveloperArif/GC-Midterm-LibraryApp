@@ -1,3 +1,5 @@
+//@ Sasi, Anesha and Arif
+
 package GUI;
 
 import java.awt.EventQueue;
@@ -42,7 +44,6 @@ public class SearchBookGUI {
 							e.printStackTrace();
 						}
 					    	
-//						books = LibraryTextFile.readFile();
 						SearchBookGUI window = new SearchBookGUI(books);
 						window.frame.setVisible(true);
 					} catch (Exception e) {
@@ -72,7 +73,6 @@ public class SearchBookGUI {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				File fileName = new File("book.txt");
 			    String keyword = keywordField.getText().trim().toUpperCase();
 				int bookNum;
 		    	
@@ -82,15 +82,6 @@ public class SearchBookGUI {
 			    		return;
 			    	}
 		    	
-		    
-			    if(!fileName.exists()){
-				    try {
-						fileName.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-
 				resultField.setText(null);
 				for(int i=0; i<books.size();i++) {
 					if(books.get(i).getBookTitle().contains(keyword)) {
@@ -111,7 +102,7 @@ public class SearchBookGUI {
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.dispose();
-				GUI.main(null);
+				MainGUIApp.main(null);
 			}
 		});
 		
@@ -149,12 +140,7 @@ public class SearchBookGUI {
 		resultField.setWrapStyleWord(true);
 		frame.getContentPane().add(resultField);
 
-		
 
-		
-		
-	
-		
 	}
 
 
