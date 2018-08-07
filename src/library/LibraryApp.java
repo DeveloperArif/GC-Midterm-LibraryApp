@@ -1,3 +1,4 @@
+//@ Sasi, Anesha and Arif
 package library;
 
 import java.util.ArrayList;
@@ -12,7 +13,9 @@ public class LibraryApp {
 		int menuOption;
 		String searchOption;
 		boolean isValid=false;
-		ArrayList<Book> books = new ArrayList<>();				
+		ArrayList<Book> books = new ArrayList<>();	
+		
+		// display welcome message
 		System.out.println("Welcome to the Grand Circus Library!");
 		System.out.println("~~~~~~~ ~~ ~~~ ~~~~~ ~~~~~~ ~~~~~~~~\n");
 		
@@ -28,7 +31,7 @@ public class LibraryApp {
 				System.out.println();
 				searchOption = Validator.getRegExString(scnr, "Would you like to search by author or keyword? (Enter author or keyword): ", "author|keyword");
 				if (searchOption.equalsIgnoreCase("author")) {
-					LibrarySystem.authorList(books);
+					LibrarySystem.authorSearch(books);
 				} else { 
 					LibrarySystem.keywordSearch(books);
 				}
@@ -46,7 +49,7 @@ public class LibraryApp {
 				isValid=true;
 		} while(!isValid);
 		
-		System.out.println("\n\nThanks for visiting Grand Circus Library!");
+		System.out.println("\n\nThanks for visiting Grand Circus Library!"); // concluding message
 		
 	} // end of main method
 	

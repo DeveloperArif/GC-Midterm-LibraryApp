@@ -1,3 +1,4 @@
+//@ Sasi, Anesha and Arif
 package library;
 
 	import java.io.FileInputStream;
@@ -12,7 +13,6 @@ package library;
 	import java.util.List;
 	import java.util.Scanner;
 	import java.text.ParseException;
-	import java.text.SimpleDateFormat;
 	import java.time.LocalDate;
 
 	public class LibraryTextFile {
@@ -23,18 +23,15 @@ package library;
 		// Modify this method as necessary to convert a line of text from the file to a new item instance
 		private static Book convertLineToItem(String line) throws ParseException {
 			String[] parts = line.split("\t");
-			//System.out.println(parts[0]+parts[1]+parts[2]+parts[3]);
-	//		SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy");
-			LocalDate date = LocalDate.now();
 			Book book = new Book();
+			
 			book.setBookTitle(parts[0].trim());
 			book.setBookAuthor(parts[1].trim());
-			//book.setBookStatus(Enum.valueOf(Status.class, parts[2]));
 			book.setBookStatus(Status.valueOf(parts[2]));
 			if(parts[3].equals("")|| parts[3].equals("null")|| parts[3].isEmpty())
 				book.setDueDate(null);
 			else 
-				book.setDueDate(date.parse(parts[3].trim()));
+				book.setDueDate(LocalDate.parse(parts[3].trim()));
 			return book;
 		}
 		
@@ -50,43 +47,34 @@ package library;
 				// Open/prepare the resources in the try resources block
 				FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
 				Scanner fileScanner = new Scanner(fileInputStream)
-			) {
-				// loop until the end of the file
+			    ) {
+				// loop until the end of the file, reads each line as a string and passed on to 
+				// convertlinetoitem method and the result is stored in ArrayList and is returned to the caller
 				while (fileScanner.hasNextLine()) {
-					// read each line as a string
 					String line = fileScanner.nextLine();
-					// then convert it to an object
 					items.add( convertLineToItem(line) );
 				}
 				
-			} catch (FileNotFoundException ex) {
-				// If the file doesn't exist, there just aren't any items.
-				
+			} catch (FileNotFoundException ex) {				
 				return items;
 			} catch (IOException e) {
-				// If something else crazy goes wrong, print out the error.
 				System.err.println("Something unexpected happended.");
 				e.printStackTrace();
 			}
 			
-			// Finally return the array of items.
 			return items;
 		}
 		
 		public static void appendLine(Book item) {
-			// convert player object to a string line of text to be written to the file
+			// convert book object to a string line of text to be written to the file
 			String line = convertItemToLine(item);
-			
 			try (
 				// The `true` here tells the FileOutputStream to append to the file rather than overwriting it
 				FileOutputStream fileOutputStream = new FileOutputStream(FILE_NAME, true);
 				PrintWriter fileWriter = new PrintWriter(fileOutputStream);
 			) {
-				// write to the file
 				fileWriter.println(line);
-				
 			} catch (IOException e) {
-				// If something else crazy goes wrong, print out the error.
 				System.err.println("Something unexpected happended.");
 				e.printStackTrace();
 			}
@@ -98,19 +86,16 @@ package library;
 				FileOutputStream fileOutputStream = new FileOutputStream(FILE_NAME, false);
 				PrintWriter fileWriter = new PrintWriter(fileOutputStream);
 			) {
-				// write to the file
 				for (Book item : items) {
-					// each item must be converted to a string of text to write to the file
 					String line = convertItemToLine(item);
 					fileWriter.println(line);
 				}
-				
 			} catch (IOException e) {
-				// If something else crazy goes wrong, print out the error.
 				System.err.println("Something unexpected happended.");
 				e.printStackTrace();
 			}
 		}
+		
 		
 		public static void createDirectory(String pathName) {
 			Path path = Paths.get(pathName);

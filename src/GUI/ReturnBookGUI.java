@@ -119,7 +119,7 @@ public class ReturnBookGUI {
 						}
 					}
 				}
-				if(matchingBooks.size() == checkedOutBooks.size()) {
+				if(matchingBooks.size() == availableBooks.size()) {
 					JOptionPane.showMessageDialog(frame, "Sorry all the books are on shelf!. Please checkout book f your choice!", "All Books are in!", JOptionPane.WARNING_MESSAGE);
 				}
 				btnForReturnBook.setEnabled(true);

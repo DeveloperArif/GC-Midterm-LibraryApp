@@ -1,3 +1,4 @@
+//@ Sasi, Anesha and Arif
 package GUI;
 
 import java.awt.EventQueue;
@@ -60,10 +61,10 @@ public class CheckoutBookGUI {
 			});
 		}
 		public CheckoutBookGUI(ArrayList<Book> books) {
-			RtrnBookGUI(books);
+			ChkoutBookGUI(books);
 		}
 
-		private static void RtrnBookGUI(ArrayList<Book> books) {
+		private static void ChkoutBookGUI(ArrayList<Book> books) {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 800, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,7 +75,7 @@ public class CheckoutBookGUI {
 		label.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		label.setBounds(200, 8, 397, 29);
 		frame.getContentPane().add(label);
-		JButton btnForReturnBook = new JButton("Checkout");
+		JButton btnForCheckoutBook = new JButton("Checkout");
 		JButton btnForSearchBook = new JButton("Search");
 		
 		btnForSearchBook.addActionListener(new ActionListener() {
@@ -100,7 +101,7 @@ public class CheckoutBookGUI {
 						e.printStackTrace();
 					}
 				}
-
+//			    do {
 				resultField.setText(null);
 				for(int i=0; i<books.size();i++) {
 					if(books.get(i).getBookTitle().contains(keyword)) {
@@ -109,10 +110,10 @@ public class CheckoutBookGUI {
 						resultField.append((i+1)+". "+books.get(i).getBookTitle()+"("+books.get(i).getBookStatus()+")\n");
 					} 
 				}
-				do {
+				
 				if(matchingBooks.isEmpty()) {
 					JOptionPane.showMessageDialog(frame, "Sorry we don't have any matching books!", "No Match", JOptionPane.WARNING_MESSAGE);
-					break;
+//					isValid=true;
 				}else {
 					for(HashMap.Entry<Integer, Book> bookEntry:matchingBooks.entrySet()) {
 						if(bookEntry.getValue().getBookStatus().equals(Status.ONSHELF)) {
@@ -122,24 +123,24 @@ public class CheckoutBookGUI {
 						}
 					}
 				}
-				if(matchingBooks.size() == availableBooks.size()) {
+				if(matchingBooks.size() == checkedOutBooks.size()) {
 					JOptionPane.showMessageDialog(frame, "Sorry all the books are on shelf!. Please checkout book of your choice!", "All Books are in!", JOptionPane.WARNING_MESSAGE);
-					break;
+//					break;
 				}
-				}while(!isValid);
-				btnForReturnBook.setEnabled(true);
+//				}while(!isValid);
+				btnForCheckoutBook.setEnabled(true);
 				bookNumField.setEnabled(true);
 				}
 				});
 			
 		
-		btnForReturnBook.addActionListener(new ActionListener() {
+		btnForCheckoutBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean isValid = false;
 				LocalDate date = LocalDate.now();
 				date = date.plusDays(14);
 
-				File fileName = new File("book.txt");
+//				File fileName = new File("book.txt");
 				int bookNum = 0;
 	     	
 			    	if(bookNumField.getText().isEmpty())
@@ -148,21 +149,21 @@ public class CheckoutBookGUI {
 			    		return;
 			    	}
 
-		    	if(!fileName.exists()){
+/*		    	if(!fileName.exists()){
 					    try {
 							fileName.createNewFile();
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-					}
+					}*/
 
-						do {
+//						do {
 						if(!availableBooks.isEmpty()) {
 							try {
 							bookNum = Integer.parseInt(bookNumField.getText());
 							}catch(Exception ex) {
 					    		JOptionPane.showMessageDialog(frame,"Invalid Input!","Error!",JOptionPane.ERROR_MESSAGE);
-								isValid=false;
+//								isValid=false;
 							}
 							if(availableBooks.containsKey(bookNum)) {
 								for(HashMap.Entry<Integer, Book> bookEntry:availableBooks.entrySet()) {
@@ -171,22 +172,22 @@ public class CheckoutBookGUI {
 										bookEntry.getValue().setDueDate(date);
 										JOptionPane.showMessageDialog(frame, "Hope you enjoy the book.Your book is due on "+date+" .", "Done!", JOptionPane.OK_OPTION);
 										LibraryTextFile.writeFile(books);
-										isValid = true;
+//										isValid = true;
 									}				
 								}
 							}  else {
 								JOptionPane.showMessageDialog(frame, "The book is already checked out!", "Already on Shelf", JOptionPane.WARNING_MESSAGE);
-								isValid = true;
+//								isValid = true;
 							}
 									
 						}else {
 							JOptionPane.showMessageDialog(frame, "Sorry we don't have that book!", "Done!", JOptionPane.OK_OPTION);
 
-								isValid = true;
+//								isValid = true;
 						} 
 								
-					} while(!isValid);
-						LibraryTextFile.writeFile(books);
+//					} while(!isValid);
+//						LibraryTextFile.writeFile(books);
 
 			}
 		});
@@ -204,10 +205,10 @@ public class CheckoutBookGUI {
 		btnForSearchBook.setBounds(150, 415, 123, 23);
 		frame.getContentPane().add(btnForSearchBook);
 		
-		btnForReturnBook.setFont(new Font("Times New Roman", Font.BOLD, 15));
-		btnForReturnBook.setBounds(350, 415, 123, 23);
-		frame.getContentPane().add(btnForReturnBook);
-		btnForReturnBook.setEnabled(false);
+		btnForCheckoutBook.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		btnForCheckoutBook.setBounds(350, 415, 123, 23);
+		frame.getContentPane().add(btnForCheckoutBook);
+		btnForCheckoutBook.setEnabled(false);
 		
 		
 

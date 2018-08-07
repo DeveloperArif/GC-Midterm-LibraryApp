@@ -1,14 +1,10 @@
+//@ Sasi, Anesha and Arif
 package library;
 
 import java.time.LocalDate;
 
 // Book class that contains private fields, getters and setters for the same and 
 // a default constructor and a parameterized constructor
-
-
-//import java.text.SimpleDateFormat;
-//import java.util.Date;
-import java.util.Date;
 
 public class Book {
 	private String bookTitle;
@@ -17,9 +13,9 @@ public class Book {
 	private LocalDate dueDate;
 
 	// default constructor
-	public Book() {
-		
+	public Book() {	
 	}
+	
 	// parameterized constructor
 	public Book(String bookTitle, String bookAuthor,Status bookStatus,  LocalDate dueDate) {
 		super();
@@ -54,14 +50,9 @@ public class Book {
 	public void setBookStatus(Status bookStatus) {
 		this.bookStatus = bookStatus;
 	}
+	
 	@Override
 	public String toString() {
-		return "Book [bookTitle=" + bookTitle + ", bookStatus=" + bookStatus + "]";
+		return bookTitle +"( "+ bookStatus + ")\n";
 	}
-	public static Book get(int i) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-
 }
